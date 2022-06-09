@@ -2,6 +2,7 @@ let a = '';
 let b = '';
 let op = '';
 
+let current = document.querySelector(`#current`);
 let input = document.querySelector(`#input`);
 
 let buttonList = Array.from(document.querySelectorAll("button"));
@@ -19,46 +20,75 @@ function updateInput(text) {
         a = '';
         b = '';
         op = '';
+        current.textContent = '';
         input.textContent = '';
     } else if (text === 'DELETE') {
         if (op !== '') {
-            b.slice(0, -1);
+            b = b.slice(0, -1);
+            input.textContent = b;
         } else {
-            a.slice(0, -1);
+            a = a.slice(0, -1);
+            input.textContent = a;
         }
-        input.textContent = input.textContent.slice(0, -1);
-
-    } else if (text === '=') {
-
     } else if (text === '.') {
-
+        if (op !== '') {
+            b += text;
+            input.textContent = b;
+        } else {
+            a += text;
+            input.textContent = a;
+        }
+    } else if (text === '=') {
+        let result = calculate();
+        current.textContent = `${a} ${op} ${b} =`;
+        a = result;
+        input.textContent = result;
     } else if (isNaN(text)) {
         op = text;
-        input.textContent += ` ${text}`;
+        if (b !== '') {
+            let result = calculate();
+            a = result;
+        }
+        current.textContent = `${a} ${text}`;
+        input.textContent = b;
     } else {
         if (op !== '') {
             b += text;
+            input.textContent = b;
         } else {
             a += text;
+            input.textContent = a;
         }
-        input.textContent += `${text}`;
+    }
+}
+
+function calculate() {
+    switch (op) {
+        case ("+"):
+            return add(a, b);
+        case ("-"):
+            return subtract(a, b);
+        case ("x"):
+            return multiply(a, b);
+        case ("/"):
+            return divide(a, b);
     }
 }
 
 function add(a, b) {
-    return a + b;
+    return Number(a) + Number(b);
 }
 
 function subtract(a, b) {
-    return a - b;
+    return Number(a) - Number(b);
 }
 
 function multiply(a, b) {
-    return a * b;
+    return Number(a) * Number(b);
 }
 
 function divide(a, b) {
-    return a / b;
+    return Number(a) / Number(b);
 }
 
 function operate(string) {
