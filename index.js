@@ -45,10 +45,6 @@ function updateInput(text) {
         input.textContent = result;
     } else if (isNaN(text)) {
         op = text;
-        if (b !== '') {
-            let result = calculate();
-            a = result;
-        }
         current.textContent = `${a} ${text}`;
         input.textContent = b;
     } else {
